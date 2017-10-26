@@ -18,7 +18,7 @@ class SecondViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        createCircle()
     }
 
     override func didReceiveMemoryWarning() {
@@ -27,10 +27,14 @@ class SecondViewController: UIViewController {
     }
     
     
-    func createCircle() {
-        let circle = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 250.0, height: 250.0))
+    func createCircle() { // Why isn't my circle showing up?
+        let circle = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 100.0, height: 100.0))
+        circle.center = self.view.center
+        circle.layer.cornerRadius = 50
         circle.backgroundColor = UIColor.blue
+        circle.clipsToBounds = true
         circleView.frame = circle.frame
+        self.view.addSubview(circleView)
         
     }
     
