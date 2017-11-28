@@ -22,38 +22,40 @@ class FirstViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //addRedSquareView()
-        //addBlueSquareView()
+        addBlueSquareView()
+        addRedSquareView()
         
+
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+        
     }
     
     
     // MARK: Functions
     
-   /* func addRedSquareView() {
+    func addRedSquareView() {
         let frame = CGRect(x: 50, y: 70, width: 150, height: 150)
-        let redSquareView = UIView(frame: frame)
+        redSquareView.frame = frame
         redSquareView.backgroundColor = .red
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(FirstViewController.redSquareTapped(gestureRecognizer:)))
         redSquareView.addGestureRecognizer(tapGestureRecognizer)
-        return redSquareView // why is this non-void?
+        view.addSubview(redSquareView)
     }
     
     func addBlueSquareView() {
-        let frame = CGRect(x: 100, y: 200, width: 50, height: 50)
-        let blueSquareView = UIView(frame: frame)
+        let frame = CGRect(x: 250, y: 250, width: 50, height: 50)
+        blueSquareView.frame = frame
         blueSquareView.backgroundColor = .blue
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(FirstViewController.blueSquareTapped(gestureRecognizer:)))
         blueSquareView.addGestureRecognizer(tapGestureRecognizer)
-        return blueSquareView // why is this non-void
-    }*/
+        view.addSubview(blueSquareView)
+    }
     
     func randomNumber(min: CGFloat, max: CGFloat) -> CGFloat {
         return CGFloat(arc4random()) / CGFloat(UInt32.max) * (max - min) + min
@@ -66,6 +68,10 @@ class FirstViewController: UIViewController {
             let pushBehavior = UIPushBehavior(items: [view], mode: .instantaneous)
             pushBehavior.pushDirection = CGVector(dx: randomNumber(min: -5, max: 5), dy: randomNumber(min: -5, max: 5))
             animator.addBehavior(pushBehavior)
+            
+            let collisionBehaviorBlue = UICollisionBehavior(items: [blueSquareView])
+            collisionBehaviorBlue.translatesReferenceBoundsIntoBoundary = true
+            animator.addBehavior(collisionBehaviorBlue)
         }
     }
     
@@ -75,6 +81,15 @@ class FirstViewController: UIViewController {
             let pushBehavior = UIPushBehavior(items: [view], mode: .instantaneous)
             pushBehavior.pushDirection = CGVector(dx: randomNumber(min: -5, max: 5), dy: randomNumber(min: -5, max: 5))
             animator.addBehavior(pushBehavior)
+        
+            let collisionBehavior = UICollisionBehavior(items: [redSquareView])
+            collisionBehavior.translatesReferenceBoundsIntoBoundary = true
+            animator.addBehavior(collisionBehavior)
+            
+            let squareCollision = UICollisionBehavior(items: [redSquareView])
+            collisionBehavior.addItem(blueSquareView)
+            animator.addBehavior(squareCollision)
+        
         }
     }
    
@@ -92,12 +107,6 @@ class FirstViewController: UIViewController {
     }*/
     
     @IBAction func addBehaviors(_ sender: UIButton!) {
-        let gravityBehavior = UIGravityBehavior(items: [redSquareView])
-        animator.addBehavior(gravityBehavior)
-        
-        let collisionBehavior = UICollisionBehavior(items: [redSquareView])
-        collisionBehavior.translatesReferenceBoundsIntoBoundary = true
-        animator.addBehavior(collisionBehavior)
         
         let elasticityBehavior = UIDynamicItemBehavior(items: [redSquareView])
         elasticityBehavior.elasticity = 0.6;
@@ -105,13 +114,6 @@ class FirstViewController: UIViewController {
         
         // Blue square dynamics
     
-        let gravityBehaviorBlue = UIGravityBehavior(items: [blueSquareView])
-        animator.addBehavior(gravityBehaviorBlue)
-        
-        let collisionBehaviorBlue = UICollisionBehavior(items: [blueSquareView])
-        collisionBehaviorBlue.translatesReferenceBoundsIntoBoundary = true
-        animator.addBehavior(collisionBehaviorBlue)
-        
         let elasticityBehaviorBlue = UIDynamicItemBehavior(items: [blueSquareView])
         elasticityBehaviorBlue.elasticity = 0.6;
         animator.addBehavior(elasticityBehaviorBlue)
